@@ -1,0 +1,35 @@
+
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    width: 85%;
+    height: auto;
+    left: 5%; top: 0; /* Положение подсказки */
+    background: rgba(255,255,230,0.9);
+    color: #192a3e;
+    text-align: center;
+    padding: 0.5em; /* Поля вокруг текста */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    pointer-events: none; /* Подсказка */
+    opacity: 0; /* Подсказка невидима */
+    transition: 1s; /* Время появления подсказки */
+    z-index: 1;
+    word-break: normal;
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+    top: 2em;
+}
+
+/* скрытие подсказок на сенсорном устройстве */
+@media (hover: none) and (pointer: coarse) {
+    [data-tooltip]::after {
+        display: none;
+    }
+}
+  

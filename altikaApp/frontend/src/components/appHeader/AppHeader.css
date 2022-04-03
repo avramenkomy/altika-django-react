@@ -1,0 +1,7 @@
+.app_header {
+    width: 100vw;
+    height: 100px;
+    background: linear-gradient(0deg, #256EA4 50%, #508BB6);
+    position: sticky;
+    top: 0;
+}
