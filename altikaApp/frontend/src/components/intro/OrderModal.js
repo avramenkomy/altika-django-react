@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Grid, Button, Dialog, IconButton, Typography, TextField } from '@material-ui/core';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -6,6 +7,8 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { withStyles, makeStyles, alpha } from '@material-ui/core/styles';
+
+import validation from '../../services/tackles/validation';
 
 const styles = (theme) => ({
   root: {
@@ -75,11 +78,38 @@ const DialogActions = withStyles((theme) => ({
 
 function OrderModal(props) {
   const classes = useStyles();
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const [phoneError, setPhoneError] = useState(false);
+  const [userNameError, setUserNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
   const handleSendOrder = () => {
-    console.log('Send order to API');
-    props.onClose();
+    userName === '' ? setUserNameError(true) : setUserNameError(false)
+    validation('email', email) ? setEmailError(false) : setEmailError(true)
+    validation('phone', phone) ? setPhoneError(false) : setPhoneError(true)
+    if ( !phoneError && !userNameError && !emailError ) {
+      console.log('request for send massege to email');
+      props.onClose();
+    }
   }
+
+  // useEffect(() => {
+  //   getCallUs();
+  // }, []);
+
+  // function getCallUs() {
+  //   axios.post('/call_us/', { userName, email, phone })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       setUserName('');
+  //       setEmail('');
+  //       setPhone('');
+  //     })
+  //     .catch((e) => { alert(`error ${e.response} with status ${e.status}`) });
+  // }
 
   return (
     <Dialog onClose={props.onClose} open={props.open} maxWidth={'xs'}>
@@ -96,6 +126,11 @@ function OrderModal(props) {
             size="small"
             className={classes.textField}
             InputProps={{ disableUnderline: true}}
+            value={userName}
+            onChange={(event) => {
+              setUserName(event.target.value)
+            }}
+            error={userNameError}
             fullWidth
           />
         </Grid>
@@ -106,6 +141,11 @@ function OrderModal(props) {
             size="small"
             className={classes.textField}
             InputProps={{ disableUnderline: true}}
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value)
+            }}
+            error={emailError}
             fullWidth
           />
         </Grid>
@@ -116,6 +156,11 @@ function OrderModal(props) {
             size="small"
             className={classes.textField}
             InputProps={{ disableUnderline: true}}
+            value={phone}
+            onChange={(event) => {
+              setPhone(event.target.value)
+            }}
+            error={phoneError}
             fullWidth
           />
         </Grid>
