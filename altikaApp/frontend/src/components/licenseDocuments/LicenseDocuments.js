@@ -65,7 +65,7 @@ function LicenseDocuments () {
         <Carousel show={show}>
           {
             documents.map((item) => {
-              return <Item {...item} />
+              return <Item {...item} key={item.id}/>
             })
           }
         </Carousel>
