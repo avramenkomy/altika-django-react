@@ -96,7 +96,6 @@ function OrderModal(props) {
   const handleSend = async function () { // запрос на отправку сообщения
     let result;
     if (userName !== '' && email !== '' && phone !== '' && !userNameError && !emailError && !phoneError) {  // TODO: поставить корректное условие
-      // result = await sendCallUs({ userName, email, phone});
       const params = {
         userName,
         email,
@@ -138,21 +137,6 @@ function OrderModal(props) {
       setPhoneError(false);
     }
   }
-
-  // useEffect(() => {
-  //   getCallUs();
-  // }, []);
-
-  // function getCallUs() {
-  //   axios.post('/call_us/', { userName, email, phone })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       setUserName('');
-  //       setEmail('');
-  //       setPhone('');
-  //     })
-  //     .catch((e) => { alert(`error ${e.response} with status ${e.status}`) });
-  // }
 
   return (
     <Dialog onClose={props.onClose} open={props.open} maxWidth={'xs'}>
