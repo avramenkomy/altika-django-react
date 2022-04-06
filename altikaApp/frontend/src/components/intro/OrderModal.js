@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { Grid, Button, Dialog, IconButton, Typography, TextField } from '@material-ui/core';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -9,6 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { withStyles, makeStyles, alpha } from '@material-ui/core/styles';
 
 import validation from '../../services/tackles/validation';
+import { Emails } from '../../services/api';
 
 const styles = (theme) => ({
   root: {
@@ -78,6 +78,7 @@ const DialogActions = withStyles((theme) => ({
 
 function OrderModal(props) {
   const classes = useStyles();
+
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -86,13 +87,55 @@ function OrderModal(props) {
   const [userNameError, setUserNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
-  const handleSendOrder = () => {
-    userName === '' ? setUserNameError(true) : setUserNameError(false)
-    validation('email', email) ? setEmailError(false) : setEmailError(true)
-    validation('phone', phone) ? setPhoneError(false) : setPhoneError(true)
-    if ( !phoneError && !userNameError && !emailError ) {
-      console.log('request for send massege to email');
-      props.onClose();
+  const checkErrors = () => {
+    !validation('string', userName).state ? setUserNameError(true) : setUserNameError(false);
+    !validation('email', email).state ? setEmailError(true) : setEmailError(false);
+    !validation('phone', phone).state ? setPhoneError(true) : setPhoneError(false);
+  }
+
+  const handleSend = async function () { // запрос на отправку сообщения
+    let result;
+    if (userName !== '' && email !== '' && phone !== '' && !userNameError && !emailError && !phoneError) {  // TODO: поставить корректное условие
+      // result = await sendCallUs({ userName, email, phone});
+      const params = {
+        userName,
+        email,
+        phone
+      }
+      result = await Emails.sendCallUs(params);
+      if (result && result.status === 200) {
+        props.onClose();
+        // TODO: добавить тост об успешной отправке заявки
+      }
+    } else {
+      checkErrors();
+    }
+  }
+
+  const handleNameInput = (event) => {
+    setUserName(event.target.value);
+    if (!validation('string', event.target.value).state) {
+      setUserNameError(true);
+    } else {
+      setUserNameError(false);
+    }
+  }
+
+  const handleEmailInput = (event) => {
+    setEmail(event.target.value);
+    if (!validation('email', event.target.value).state) {
+      setEmailError(true);
+    } else {
+      setEmailError(false);
+    }
+  }
+  
+  const handlePhoneInput = (event) => {
+    setPhone(event.target.value);
+    if (!validation('phone', event.target.value).state) {
+      setPhoneError(true);
+    } else {
+      setPhoneError(false);
     }
   }
 
@@ -127,9 +170,7 @@ function OrderModal(props) {
             className={classes.textField}
             InputProps={{ disableUnderline: true}}
             value={userName}
-            onChange={(event) => {
-              setUserName(event.target.value)
-            }}
+            onInput={handleNameInput}
             error={userNameError}
             fullWidth
           />
@@ -142,9 +183,7 @@ function OrderModal(props) {
             className={classes.textField}
             InputProps={{ disableUnderline: true}}
             value={email}
-            onChange={(event) => {
-              setEmail(event.target.value)
-            }}
+            onInput={handleEmailInput}
             error={emailError}
             fullWidth
           />
@@ -157,9 +196,7 @@ function OrderModal(props) {
             className={classes.textField}
             InputProps={{ disableUnderline: true}}
             value={phone}
-            onChange={(event) => {
-              setPhone(event.target.value)
-            }}
+            onInput={handlePhoneInput}
             error={phoneError}
             fullWidth
           />
@@ -169,7 +206,7 @@ function OrderModal(props) {
       <DialogActions>
         <Grid container className={classes.itemsAction}>
           <Grid item xs={12}>
-            <Button variant="contained" onClick={handleSendOrder} color="primary" fullWidth>
+            <Button variant="contained" onClick={handleSend} disabled={userNameError || emailError || phoneError} color="primary" fullWidth>
               Отправить
             </Button>
           </Grid>
