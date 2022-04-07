@@ -1,2 +1,2 @@
 release: python altikaApp/manage.py migrate
-web: gunicorn altikaApp.wsgi --log-file -
+web: python altikaApp/manage.py runserver 0.0.0.0:$PORT
