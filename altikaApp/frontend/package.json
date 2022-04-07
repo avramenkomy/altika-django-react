@@ -32,10 +32,18 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "heroku-prebuild": "NODE_ENV=production cd frontend/ && yarn install && yarn build && cd ..",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "cacheDirectories": [
+    "frontend/node_modules"
+  ],
+  "engines": {
+    "node": "14.17.3",
+    "npm": "6.14.13"
   },
   "eslintConfig": {
     "extends": [
