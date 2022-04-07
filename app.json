@@ -1,0 +1,6 @@
+{
+  "name": "altika-django-react",
+  "description": "Altika page on Heroku",
+  "image": "heroku/python",
+  "keywords": ["python", "django" ]
+}
