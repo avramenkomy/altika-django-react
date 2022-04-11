@@ -141,7 +141,7 @@ GitHub.sublime-settings
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # frontend
-/frontend
+altikaApp/frontend
 
 # dependencies
 /node_modules
