@@ -59,11 +59,15 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <div id="header" />
       <AppHeader darkTheme={darkMode} onChangeTheme={setDarkMode} />
       <main>
         <Intro />
+        <div id="about" />
         <About darkTheme={darkMode} />
+        <div id="expertise_types" />
         <ExpertiseTypes />
+        <div id="services" />
         <Services darkMode={darkMode} />
         <StepByWork />
         <ReasonsForExpertise />
@@ -72,6 +76,7 @@ function App() {
         <Notes />
       </main>
       <footer>
+        <div id='contacts' />
         <FooterComponent />
       </footer>
     </ThemeProvider>
